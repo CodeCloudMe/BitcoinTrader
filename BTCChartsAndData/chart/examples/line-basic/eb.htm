@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+/*
+        $.getJSON('http://hedon.mobi/cloud/api/play/get.php?callback=?&action=getAll',
+                { },
+                function(res){
+
+                    console.log(res);
+                   t= new sorter(res['data'], 15);
+                   t.breakUp();
+  
+            });
+
+*/
+        var sorter= function(arr, limit){
+
+            //comment to keep private
+            //this.array =array;
+           // this.limit= limit;
+            this.breakUp=function(){
+
+                var finalArr =[];
+
+                var winsArr=[];
+                var lossArr=[];
+                var drawArr=[];
+                 finIndex=0;
+                    xAx=[];
+                    bets=[];
+
+                for(i=0; i< arr.length; i++){
+                   
+                    pushedArray =[];
+                    wins=0;
+                    losses=0;
+                    draws=0;
+                    betAmount=0;
+
+                    for(j=0; j<limit; j++){
+
+                        k=parseInt(i)+parseInt(j);
+                        if(k>=arr.length){
+                            break;
+                        }
+                        console.log(k);
+                        pushedArray[j]= arr[k];
+                        if(arr[k]['result']=="win"){
+                            wins=wins+1;
+                        }
+                         else if(arr[k]['result']=="loss"){
+                            losses=losses+1;
+                        }
+                        else{
+                            draws= draws+1;
+                        }
+
+                        betAmount= betAmount+ parseInt(arr[k]['betAmount']);
+
+                         
+
+                    }
+
+                    //normalize
+                    bets.push((betAmount/limit));
+                    xAx.push(finIndex);
+                    finIndex= finIndex+1;
+                   winsArr.push(wins);
+                        lossArr.push(losses);
+                        drawArr.push(draws);
+                    finalArr.push(pushedArray);
+                    i=i+limit;
+                   
+                }
+
+                console.log(bets);
+                this.bets=bets;
+
+
+                this.xAx=xAx;
+                console.log(xAx);
+                
+                
+                console.log(finalArr);
+
+                console.log(winsArr);
+                this.winsArr=winsArr;
+                console.log(lossArr);
+                this.lossArr=lossArr;
+                console.log(drawArr);
+                this.drawArr=drawArr;
+                this.finalArr=finalArr;
+
+                genChart();
+
+            }
+        }
+
+
+        //time is rIds
+
+        //push onto rIds, all rIds
+$(function () {
+        $('#container').highcharts({
+            title: {
+                text: 'Monthly Average Temperature',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'source: mined data',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                
+
+                title: {
+                    text: 'Card'
+                }
+
+                /*
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+                */
+            },
+            tooltip: {
+                valueSuffix: '°C'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Order',
+                data: ["10", "9", "K", "A", "J", "3", "9", "4", "2", "7"]
+            }
+            ]
+        });
+    });
+
+
+function genChart(){
+
+     $('#container').highcharts({
+            title: {
+                text: 'Win/Losses/Draws By Bet',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: t.xAx
+            },
+            yAxis: {
+                title: {
+                    text: '# of result kind'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: 'times'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Wins',
+                data: t.winsArr
+            }, {
+                name: 'Losses',
+                data: t.lossArr
+            }, {
+                name: 'Draws',
+                data:t.drawArr
+            }, 
+
+            
+            {
+                name: 'Normalized Bet Volume',
+                data: t.bets
+            }
+           
+            ]
+        });
+}
+    
+
+		</script>
+	</head>
+	<body>
+<script src="../../js/highcharts.js"></script>
+<script src="../../js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>

@@ -1,0 +1,468 @@
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:apigee="http://api.apigee.com/wadl/2010/07/" xmlns="http://wadl.dev.java.net/2009/02" xsi:schemaLocation="http://wadl.dev.java.net/2009/02 http://apigee.com/schemas/wadl-schema.xsd http://api.apigee.com/wadl/2010/07/ http://apigee.com/schemas/apigee-wadl-extensions.xsd">
+<!--
+ Base defines the domain and base path of the endpoint 
+-->
+<resources base="http://alina-prod.apigee.net/">
+<!--  A simple resource with a GET method  -->
+
+<!--
+ A resource with a GET method that requires a template parameter, a query parameter and a header 
+-->
+<resource path="/diff">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default="hello">
+<doc>Info1 represents the first string you want to send in for parsing</doc>
+</param>
+
+<param name="info2" required="true" type="xsd:string" style="query" default="yellow">
+<doc>Info1 represents the first string you want to send in for parsing</doc>
+</param>
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="diff" name="GET" apigee:displayName="Diff">
+<apigee:tags>
+<apigee:tag primary="true">Diff</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+Find the Jaro–Winkler string distance between two strings of data
+</doc>
+</method>
+</resource>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<resource path="/classifier">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default='%5B%20%7B%22info%22%3A%20%22short%20bitcoin%22%2C%20%22class%22%3A%20%22sell%22%7D%2C%20%7B%22info%22%3A%20%22long%20bitcoin%22%2C%20%22class%22%3A%20%22buy%22%7D%20%5D'>
+<doc>Info1 must be a JSON of the data you would like to classify, with key-value pairs of info and class. Info is the data, and class is the classifier associated with the info data for the training. Example: [ {"info": "short bitcoin", "class": "sell"}, {"info": "long bitcoin", "class": "buy"} ] . The example data is url encoded</doc>
+</param>
+
+<param name="what" required="true" type="xsd:string" style="query" default="short bitcoin">
+<doc>Data you would like classified based on training data.</doc>
+</param>
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="classifier" name="GET" apigee:displayName="Classifier">
+<apigee:tags>
+<apigee:tag primary="true">Classifier</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+Using the Naive Bayes algorithm, you send in your training data and the &quot;what&quot; data that you need classified and the appropriate classifier is determined
+</doc>
+</method>
+</resource>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<resource path="/sentiment">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default="The cat is bad.">
+<doc>Info1 is the data you would like to receive sentiment data for.</doc>
+</param>
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="sentiment" name="GET" apigee:displayName="Sentiment">
+<apigee:tags>
+<apigee:tag primary="true">Sentiment</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+This endpoint provides sentiment analysis on key descriptors in a string (determines how positive or negative a comment is)
+</doc>
+</method>
+</resource>
+
+
+
+
+
+<resource path="/stem">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default="I ran to the helicopters">
+<doc>Info1 is the data you would like to stem</doc>
+</param>
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="stem" name="GET" apigee:displayName="Stem">
+<apigee:tags>
+<apigee:tag primary="true">Stem</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+This endpoint provides the stem word of each word passed. For example, "walked" will be "walk". "Ran" will be run. "Helicopters" will be "Helicopter". 
+</doc>
+</method>
+</resource>
+
+
+
+
+<resource path="/words">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default="Several years ago, I saw a mountain. It was tall.">
+<doc>Info1 is the data you would like to tokenize</doc>
+</param>
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="words" name="GET" apigee:displayName="Words">
+<apigee:tags>
+<apigee:tag primary="true">Words</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+This endpoint allows you to "tokenize" or split off into an array all the words of a sentence. This works for most languages. 
+</doc>
+</method>
+</resource>
+
+
+
+
+
+<resource path="/friendly-helper">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="sentence" required="true" type="xsd:string" style="query" default="What is the world's population?">
+<doc>Sentence param is the raw data you would like to send to the server. </doc>
+</param>
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="friendly-helper" name="GET" apigee:displayName="Friendly Helper">
+<apigee:tags>
+<apigee:tag primary="true">Friendly Helper</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+This is the all-in-one helper, chatbot, and task doer that you can train, as used in the Chrome Extension.
+</doc>
+</method>
+</resource>
+
+
+
+
+
+
+<resource path="/texttypo">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default="I was dunk last night drunk@">
+<doc>Info1 is the string you would like auto-corrected by appending the @ symbol to a word that needs to replace another mispelled word</doc>
+</param>
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="texttypo" name="GET" apigee:displayName="TextTypo">
+<apigee:tags>
+<apigee:tag primary="true">TextTypo</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+Keukey-like feature that allows a user to identify a word that is mispelled via autocorrect by typing in the correct word
+</doc>
+</method>
+</resource>
+
+
+
+
+
+
+
+
+
+
+
+<resource path="/whattime">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default="Let's meet tomorrow at 7pm">
+<doc>Info1 raw data you need to extract a date-time object from.</doc>
+</param>
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="npIZYYxsfzE0DOVX92oEPwGTV95wg7X6">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="whattime" name="GET" apigee:displayName="WhatTime">
+<apigee:tags>
+<apigee:tag primary="true">WhatTime</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+WhatTime takes raw text from chat conversations and determines what time is meant to be scheduled based on context of the discussion.
+</doc>
+</method>
+</resource>
+
+
+
+
+
+<resource path="/closestconstant">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="info1" required="true" type="xsd:string" style="query" default="[1,4,5]">
+<doc>Info1 is time series data to be compared as flat JSON</doc>
+</param>
+
+
+<param name="info2" required="true" type="xsd:string" style="query" default="[1,4,5]">
+<doc>Info2 is time series data to be compared as flat JSON</doc>
+</param>
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="fbESAOKT4mhobjxXkME5QRySawSkob0V">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="closestconstant" name="POST" apigee:displayName="ClosestConstant">
+<apigee:tags>
+<apigee:tag primary="true">ClosestConstant</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+Closest Constant provides a way of determining patterns between two time series arrays (great for finding Bitcoin trading patterns)
+</doc>
+</method>
+</resource>
+
+
+
+
+
+<resource path="/bitcoin">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="what" required="true" type="xsd:string" style="query" default="history">
+<doc>Get current price, news history, trade history of Bitcoin. (Works great in conjunction with the ClosestConstant method, which can provide pattern information for determining predictability of Bitcoin volatility. Specify which with "what" param.</doc>
+</param>
+
+
+
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="fbESAOKT4mhobjxXkME5QRySawSkob0V">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="bitcoin" name="GET" apigee:displayName="Bitcoin">
+<apigee:tags>
+<apigee:tag primary="true">Bitcoin</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+Get current price, news history, trade history of Bitcoin. (Works great in conjunction with the ClosestConstant method, which can provide pattern information for determining predictability of Bitcoin volatility
+</doc>
+</method>
+</resource>
+
+
+<resource path="/bitcoinprediction">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+
+
+<param name="what" required="true" type="xsd:string" style="query" default="minutely">
+<doc>Get beneficial bitcoin trade predictions based on neural networks learning from bitcoin movement along with genetic algorithms looking for the best solutions. "what" parameter indicates what interval to analyze. Currently, minutely is the only supported interval and works from 5-30 minute interval of trades.</doc>
+</param>
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="fbESAOKT4mhobjxXkME5QRySawSkob0V">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="bitcoinpredictor" name="GET" apigee:displayName="Bitcoin-Predictor">
+<apigee:tags>
+<apigee:tag primary="true">Bitcoin Price Predictor</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+Get bitcoin price prediction data generated by neural nets and genetic algorithms analyzing the data and seeking the best solutons for trading for profit.
+</doc>
+</method>
+</resource>
+
+
+
+<resource path="/recommendation">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+
+
+<param name="rating" required="true" type="xsd:string" style="query" default="3">
+<doc></doc>
+</param>
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="fbESAOKT4mhobjxXkME5QRySawSkob0V">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="recommendation" name="POST" apigee:displayName="Recommendation Engine">
+<apigee:tags>
+<apigee:tag primary="true">Recommendation</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+
+</doc>
+</method>
+</resource>
+
+
+
+
+
+
+
+<resource path="/emaillist">
+
+<param name="format" required="false" type="xsd:string" style="template" default="json">
+<!--  Docs are optional, but recommended.  -->
+<doc>Response format.</doc>
+</param>
+<param name="subject" required="true" type="xsd:string" style="query" default="tech public relations nyc">
+<doc>The Subject you would like to get all cooresponding e-mails for the scecified topic(this request takes from 1 -5 minutes to complete).</doc>
+</param>
+
+<param name="limit" required="true" type="xsd:string" style="query" default="1">
+<doc>Number of search result pages that will be queried in your subject. About 20-60 e-mails are returned per page on average. Every page adds about 1 minute to your wait time for a response. </doc>
+</param>
+
+
+
+
+
+
+
+<param name="apikey" required="true" type="xsd:string" style="query" default="77WrFXT4GcvAXgcLEMuuyMqxGPyxq2Qk">
+<doc>API Keys are required to make requests. To get your API key, visit alinaAPI.com</doc>
+</param>
+
+<method id="emaillist" name="GET" apigee:displayName="Email List">
+<apigee:tags>
+<apigee:tag primary="true">E-mail List</apigee:tag>
+</apigee:tags>
+<apigee:authentication required="false"/>
+<doc>
+Get e-mail addresses for any topic
+</doc>
+</method>
+</resource>
+
+
+
+
+
+
+</resources>
+</application>

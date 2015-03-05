@@ -1,0 +1,455 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Alina's BTC Trader</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+
+        <script>
+
+       var sentScores=[];
+        var prices=[];
+        var comp = [];
+        var vol =[];
+
+        function getInfo(){
+
+
+                $.getJSON('http://btc-maybe588.rhcloud.com/cloud/models/btc/charts.php?callback=?',function(res){
+                        
+                        allPrices = res['prices'];
+                        allNews = res['news'];
+
+
+                        for(i in res['prices']){
+                            if(i ==0){
+
+                                pPeriods = res['prices'][i]['tDate'].split(/-| /g);
+                                pPeriods[0] = parseInt(pPeriods[0]);
+                                 pPeriods[1] = parseInt(pPeriods[1]-1);
+                                  pPeriods[2] = parseInt(pPeriods[2]);
+
+                            }
+                           prices.push(parseFloat(res['prices'][i]['avg']));
+                             vol.push(parseFloat(res['prices'][i]['volume']/100));
+
+                           
+                        }
+
+                        for(i in res['news']){
+
+                            if(i==0){
+                             nPeriods = res['news'][i]['dateT'].split(/-| /g);
+
+                              nPeriods[0] = parseInt(nPeriods[0]);
+                                 nPeriods[1] = parseInt(nPeriods[1]-1);
+                                  nPeriods[2] = parseInt(nPeriods[2]);
+                              }
+                           sentScores.push(parseFloat(res['news'][i]['sentiment']) *100);
+                             comp.push(parseFloat(res['news'][i]['comparative'])*1000);
+                           
+                           
+                        }
+
+                        setTimeout(function(){
+
+                            doCharts();
+                            //playTrade(7);
+
+                        }, 500)
+                    });
+
+        }
+       
+        </script>
+		<script type="text/javascript">
+
+        getInfo();
+        function doCharts(){
+        $('#container').highcharts({
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: 'Bitcoin Prices, Trade Volume and News Sentiment'
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' :
+                    'Pinch the chart to zoom in'
+            },
+            xAxis: {
+                type: 'datetime',
+                minRange: 14 * 24 * 3600000 // fourteen days
+            },
+            yAxis: {
+                title: {
+                    text: 'BTC Price'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                area: {
+                    fillColor: {
+                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    },
+                    marker: {
+                        radius: 2
+                    },
+                    lineWidth: 1,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    threshold: null
+                }
+            },
+    
+            series: [{
+                        type: 'area',
+                        name: 'Bitcoin Avg Price Per Day',
+                        pointInterval: 24 * 3600 * 1000,
+                        pointStart: Date.UTC(pPeriods[0], pPeriods[1], pPeriods[2]),
+                        data: prices
+                        },
+
+                        {type: 'line',
+                        name: 'Sentiment Score',
+                        pointInterval: 24 * 3600 * 1000,
+                        pointStart: Date.UTC(nPeriods[0], nPeriods[1], nPeriods[2]),
+                        data: sentScores
+                        },
+
+                         {type: 'line',
+
+                        name: 'Comparative Score',
+                        pointInterval: 24 * 3600 * 1000,
+                        pointStart: Date.UTC(nPeriods[0], nPeriods[1], nPeriods[2]),
+                        data: comp
+                        },
+
+                         {type: 'line',
+
+                        name: 'Volume',
+                        pointInterval: 24 * 3600 * 1000,
+                        pointStart: Date.UTC(pPeriods[0], pPeriods[1], pPeriods[2]),
+                        data: vol
+                        }
+
+
+
+                               ]
+        });
+    }
+    
+
+		</script>
+
+
+        <script>
+        tPrices=[];
+        tVol=[];
+        tSenti=[];
+
+        buyOrders=0;
+
+        startingPot = 10000000;
+        function playTrade(theNum){
+
+           
+
+            //pair arrays to match dates in 2 arrays
+            for(i in allPrices){
+
+                for(j in allNews){
+
+                    if(allNews[j]['dateT'].split(" ")[0] == allPrices[i]['tDate'].split(" ")[0]){
+
+                        tPrices.push(parseFloat(allPrices[i]['avg']));
+                        tVol.push(parseFloat(allPrices[i]['volume']));
+                        tSenti.push(parseFloat(allNews[j]['sentiment']));
+
+                    }
+                }           
+
+            }
+
+        
+
+            for(y=theNum; y<tSenti.length; y++ ){
+
+                //y is today 
+                multiple =1;
+                highestCorr = 0;
+                isBuying = false;
+                for(u = 1; u<theNum; u++){
+                    y = parseInt(y);
+
+                    var tStart= y-theNum;
+                    var tEnd = y;
+
+                    var res1 = outwayCorr(tVol, tPrices, u, tStart, tEnd);
+
+                    var res2 = outwayCorr(tSenti, tPrices, u, tStart, tEnd);
+
+                    var order = "nogo";
+                    if(res1['correlation']>highestCorr){
+                        if(res1['correlation']>.9 && res1['correlation'] <2 ){
+                             console.log("offest is"+ res1['offset'] + "at "+ res1['correlation'] + "with stat index of "+ tStart+ "and end index of "+ tEnd);
+                            isBuying=true;
+                        }
+                        else{
+                            continue;
+                        }
+                       
+
+                        highestCorr=res1['correlation'];
+
+                        if(highestCorr > .99){
+                            multiple=10000
+                        }
+                        else if(highestCorr > .95){
+                            multiple=10000
+                        }
+                        else{
+                            multiple = 300;
+                        }
+                        thisOffest = res1['offset'];
+                       todaysPrice =  tPrices[y];
+                       offsetDay = y - thisOffest ;
+                        offsetDayAfter = y - thisOffest+1;
+                        todaysDate = parseInt(y);
+
+                        //determine win or loss
+                        
+
+
+
+
+
+                        //go to this offset in the data and
+                        //look at direction of two values
+                        //if is supposed to go up on next day, do a buy sell starting with this offset
+
+                    }
+
+
+                
+
+
+                }
+
+                if(isBuying ==false){
+                    console.log("skipping");
+                    continue;
+                }
+                    if(tVol[offsetDay] < tVol[offsetDayAfter]){
+
+                            result3 = "won";
+                        }
+                        else{
+                            result3="lost";
+                        }
+
+                        if(result3=="lost" && res1['rel']== "diff"){
+                          console.log("buy");
+                            buyOrders= buyOrders+1;
+                            order="buy";
+                        }
+                         if(result3=="won" && res1['rel']== "same"){
+                           console.log("buy");
+                            buyOrders= buyOrders+1;
+                            order="buy";
+                        }
+
+                        if(order == "buy"){
+
+                           tomorrow=  todaysDate+1;
+                           today = todaysDate;
+
+                            if(typeof(tPrices[tomorrow]) !="undefined"){
+
+                                
+                            
+                           startingPot = startingPot-(tPrices[today]* multiple);
+                           startingPot = startingPot+(tPrices[tomorrow] * multiple);
+                           console.log("bought at "+ multiple +" BTC at "+tPrices[today] );
+                           console.log("sold at "+ multiple +" BTC at "+tPrices[tomorrow] );
+                       }
+
+                        }
+
+                
+                //look at last 40 days and find best correlation
+
+                //go to the offset and place buy order day before and sell order day after
+
+            }
+
+
+
+
+             // start from 3 months out
+
+            // find the best correlations...
+
+            //look for a price hike... based on probablity trade
+
+            //keep record of start balance and end balance
+
+
+        }
+
+            function outwayCorr(series11, series22, tries, start, end){
+
+                var series1 = series11;
+               var  series2=series22;
+                 if(typeof tries == "undefined"){
+                        var tries = 10;
+                    }
+
+                    if(typeof start == "undefined"){
+                        var start = 0;
+                    }
+
+                    if(typeof end == "undefined"){
+                        var end = (series1.length); console.log(end);
+                    }
+                  series1= series1.slice(start,end);
+                    series2= series2.slice(start,end);
+
+                    var highestCorr = 0;
+                    var whichRel = "diff";
+                    var bestOffset = 1;
+                for(t= 1; t<= tries; t++ ){
+                    var off= parseInt(t);
+                    var theRes = determineCorr(series1, series2,off);
+                    if(theRes['by'] > highestCorr){
+                        highestCorr= theRes['by'];
+                        whichRel= theRes['results'];
+                        bestOffset = off;
+
+                    }
+                   
+                }
+
+                 return {"offset":bestOffset, "rel":whichRel, "correlation":highestCorr};
+            }
+
+            function determineCorr(series1, series2, offset){
+
+                if(typeof offset == "undefined"){
+                        offset = 1;
+                    }
+                //generate an array of when what
+                var allCor= [];
+                for( k in series1){
+                    if(typeof series2[k] == "undefined"){
+                        break;
+                    }
+
+
+                    k = parseInt(k);
+                    var n = k+offset;
+
+                    if(typeof series1[n] == "undefined"){
+                        break;
+                    }
+                    var before1= series1[k];
+                    var after1 = series1[n];
+
+                     var before2= series2[k];
+                    var after2 = series2[n];
+
+                    var toAdd = whenWhat(before1, after1, before2, after2);
+                    allCor.push(toAdd);
+
+
+                }
+               var result1 = getCorrelation(allCor);
+                return result1;
+            }
+
+           function whenWhat( beforeF1, afterF1, beforeF2, afterF2){
+
+                var whatHappend1 = "lost";
+                var whatHappend2 = "lost";
+                //
+                if(beforeF1 >= afterF1){
+                     whatHappend1 = "won";
+                    //factor 1 increased or stayed same
+                }
+                else{
+                    //factor 1 decreased
+                     whatHappend1 = "lost";
+                }
+
+                 if(beforeF2 >= afterF2){
+                     whatHappend2 = "won";
+                    //factor 2 increased or stayed same
+                }
+                else{
+                     whatHappend2 = "lost";
+                    //factor 1 decreased
+                }
+
+                return [whatHappend1, whatHappend2];
+
+            }
+
+            //66 percent correlation
+            [['won', 'won'],['won', 'won'],['won', 'lost']]
+
+            function getCorrelation(arr1){
+                var results = [];
+                for(i in arr1){
+
+                    if(arr1[i][0] == arr1[i][1]){
+                        results.push("same");
+                    }
+                    else{
+
+                          results.push("diff");
+                    }
+                }
+                var sameNum=0;
+                var diffNum = 0;
+                var all = results.length;
+
+                for( j in results){
+                    if(results[j]=="same"){
+                        sameNum= sameNum +1;
+                    }
+                    else{
+                        diffNum = diffNum+1;
+                    }
+                }
+
+                if(diffNum>= sameNum){
+                    return {results:"diff", "by":(diffNum/all)}
+                }
+
+                else{
+                    return {results:"same", "by":(sameNum/all)}
+                }
+            }
+
+        </script>
+	</head>
+	<body>
+<script src="../../js/highcharts.js"></script>
+<script src="../../js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>

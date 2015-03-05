@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bitcoin Price Predictor Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="mike">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/alertify.css" rel="stylesheet">
+     <link href="assets/css/morris.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="Favicon Icon" href="favicon.ico">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="https://raw.github.com/scottjehl/Respond/master/src/respond.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="wrap">
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <div class="logo"> 
+            <img src="assets/img/logo.png" alt="">
+          </div>
+           <a class="btn btn-navbar visible-phone" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+           <a class="btn btn-navbar slide_menu_left visible-tablet">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+
+          <div class="top-menu visible-desktop">
+            <ul class="pull-left">
+             <!-- <li><a id="messages" data-notification="2" href="#"><i class="icon-envelope"></i> Messages</a></li>
+              <li><a id="notifications" data-notification="3" href="#"><i class="icon-globe"></i> Notifications</a></li>-->
+            </ul>
+            <ul class="pull-right">  
+             <!-- <li><a href="login.html"><i class="icon-off"></i> Logout</a></li>-->
+            </ul>
+          </div>
+
+          <div class="top-menu visible-phone visible-tablet">
+            <ul class="pull-right">  
+              <li><a title="link to View all Messages page, no popover in phone view or tablet" href="#"><i class="icon-envelope"></i></a></li>
+              <li><a title="link to View all Notifications page, no popover in phone view or tablet" href="#"><i class="icon-globe"></i></a></li>
+              <li><a href="login.html"><i class="icon-off"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+     
+      <!-- Side menu -->
+     
+      <!-- /Side menu -->
+
+      <!-- Main window -->
+      <div class="main_container" id="dashboard_page">
+        <div class="row-fluid">
+          <div class="overview_boxes">
+            <div class="box_row clearfix">
+              <div class="widget-tasks-statistics">
+                <div class="userstats clearfix" style="margin-top: 25px;">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#example_modal2">
+                    <div class="white">
+                      <i style="color:#E28271" class="icon-money"></i>
+                      <p style="color:#E28271" >Price</p>
+                    </div>
+                    <div>
+                      <input class="knob" data-width="120" data-height="120" data-displayInput=false data-readOnly=true data-thickness=".15" value="0">   
+                    </div>
+                    <p><strong>...</strong></p>
+                  </a>
+                </div>
+              </div>
+              <div class="widget-tasks-statistics">
+                <div class="userstats clearfix" style="margin-top: 25px;">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#example_modal2">
+                    <div class="white">
+                      <i style="color:#98E5EA" class="icon-bullhorn"></i>
+                      <p style="color:#98E5EA" >Bid</p>
+                    </div>
+                    <div>
+                      <input class="knob" data-width="120" data-height="120" data-displayInput=false data-readOnly=true data-thickness=".15" value="0">   
+                    </div>
+                    <p><strong>...</strong></p>
+                  </a>
+                </div>
+              </div>
+              <div class="widget-tasks-statistics">
+                <div class="userstats clearfix" style="margin-top: 25px;">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#example_modal2">
+                    <div class="white">
+                      <i style="color:#AEEA98" class="icon-phone"></i>
+                      <p style="color:#AEEA98" >Ask</p>
+                    </div>
+                    <div>
+                      <input class="knob" data-width="120" data-height="120" data-displayInput=false data-readOnly=true data-thickness=".15" value="0">   
+                    </div>
+                    <p><strong>...</strong></p>
+                  </a>
+                </div>
+              </div>
+            </div> 
+            <div class="box_row clearfix">
+              <div class="widget-tasks-statistics">
+                <div class="userstats clearfix" style="margin-top: 25px;">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#example_modal2">
+                    <div class="white">
+                      <i style="color:#98AEEA" class="icon-eye-open"></i>
+                      <p style="color:#98AEEA" >Volume</p>
+                    </div>
+                    <div>
+                      <input class="knob" data-width="120" data-height="120" data-displayInput=false data-readOnly=true data-thickness=".15" value="0">   
+                    </div>
+                    <p><strong>...</strong></p>
+                  </a>
+                </div>
+              </div>
+              <div class="widget-tasks-statistics">
+                <div class="userstats clearfix" style="margin-top: 25px;">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#example_modal2">
+                    <div class="white">
+                      <i style="color:#EA98AB" class="icon-thumbs-up"></i>
+                      <p style="color:#EA98AB" >High</p>
+                    </div>
+                    <div>
+                      <input class="knob" data-width="120" data-height="120" data-displayInput=false data-readOnly=true data-thickness=".15" value="0">   
+                    </div>
+                    <p><strong>...</strong></p>
+                  </a>
+                </div>
+              </div>
+              <div class="widget-tasks-statistics">
+                <div class="userstats clearfix" style="margin-top: 25px;">
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#example_modal2">
+                    <div class="white">
+                      <i style="color:#F6BF99" class="icon-thumbs-down"></i>
+                      <p style="color:#F6BF99" >Low</p>
+                    </div>
+                    <div>
+                      <input class="knob" data-width="120" data-height="120" data-displayInput=false data-readOnly=true data-thickness=".15" value="0">   
+                    </div>
+                    <p><strong>...</strong></p>
+                  </a>
+                </div>
+              </div>
+            </div> 
+          </div>
+        </div>  
+
+
+        <!-- CHARTS  -->
+        <div class="row-fluid">
+          <div class="widget span4">
+            <div class="widget-header">
+              <i class="icon-bar-chart"></i>
+              <h5>Trade Stats</h5>
+              <div class="widget-buttons">
+                  <a href="javascript:void(0)" class="collapse" data-collapsed="false"><i data-title="Collapse" class="icon-chevron-up"></i></a>
+              </div>
+            </div>  
+            <div class="widget-body clearfix">
+              <div class="widget-analytics-small">
+                <ul>
+                  <li>
+                   
+                    <h5>2 hr Return:</h5>
+                    <h4>...</h4>
+                  </li>
+                  <li>
+                   
+                    <h5>Buy Play:</h5>
+                    <h4>...</h4>
+                  </li>
+                  <li>
+                    
+                    <h5>Sell Play:</h5>
+                    <h4>...</h4>
+                  </li>
+                  <li>
+                   
+                    <h5>Last Buy:</h5>
+                    <h4>...</h4>
+                  </li>
+                  <li>
+                   
+                    <h5>Last Sell:</h5>
+                    <h4>...</h4>
+                  </li>
+                  <li>
+                    
+                    <h5>Bought (prev):</h5>
+                    <h4>...</h4>
+                  </li>
+                  <li>
+                   
+                    <h5>Sold (prev):</h5>
+                    <h4>...</h4>
+                  </li>
+                </ul>
+              </div>
+            </div> <!-- /widget body -->
+          </div> <!-- /widget span12 -->
+          <div class="widget span8">
+            <div class="widget-header">
+              <i class="icon-credit-card"></i>
+              <h5>Latest Prices (Last 2 Hours)</h5>
+              <div class="widget-buttons">
+                  <a href="javascript:void(0)" class="collapse" data-collapsed="false"><i data-title="Collapse" class="icon-chevron-up"></i></a>
+              </div>
+            </div>
+            <div class="widget-body clearfix">
+              <div style="height:274px;" id="graph" class="widget-analytics-large"></div>
+            </div>
+          </div>
+        </div> <!-- /row-fluid -->
+<!--
+          <div class="row-fluid">
+            <div class="widget widget-padding span4">
+              <div class="widget-header">
+                <i class="icon-circle"></i>
+                <h5>Quick Buttons</h5>
+                <div class="widget-buttons">
+                    <a href="javascript:void(0)" class="collapse" data-collapsed="false"><i data-title="Collapse" class="icon-chevron-up"></i></a>
+                </div>
+              </div>
+              <div class="widget-body" style="min-height: 170px;">
+                <div class="row-fluid" style="margin-bottom:15px;">
+                  <a class="btn btn-small btn-box bubble bubble-info span4 tips" href="#" data-title="bubble-info" data-bubble="7k"><i class="icon-thumbs-up"></i><span>Likes</span></a>
+                  <a class="btn btn-small btn-box bubble bubble-info span4 tips" href="#" data-title="bubble-info" data-bubble="10"><i class="icon-twitter"></i><span>Tweets</span></a>
+                  <a class="btn btn-small btn-box span4 " href="#"><i class="icon-money"></i><span>Finance</span></a>
+                </div><!-- /row-fluid -->
+                
+
+              </div><!-- /widget-body -->
+            </div><!-- /widget -->
+           
+            
+          </div><!-- /row-fluid -->
+
+
+
+         <!-- /row-fluid -->
+
+
+  
+
+          <div class="row-fluid" style="display:none">
+            <div class="widget span6">
+              <div class="widget-header"><i class="icon-signal"></i><h5>Bar Chart</h5>
+              <div class="widget-buttons">
+                  <a href="javascript:void(0)" class="collapse" data-collapsed="false"><i data-title="Collapse" class="icon-chevron-up"></i></a>
+              </div>
+              </div>
+              <div class="widget-body clearfix">
+                <div class="analytics_item" id="barchart"></div>
+              </div>
+            </div>
+            <div class="widget span3">
+                <div class="widget-header"><i class="icon-signal"></i><h5></h5>
+                <div class="widget-buttons">
+                    <a href="javascript:void(0)" class="collapse" data-collapsed="false"><i data-title="Collapse" class="icon-chevron-up"></i></a>
+                </div>
+                </div>
+                <div class="widget-header-under"></div>
+                <div class="widget-body clearfix" style="min-height: 319px;">
+                  <table class="table table-striped">
+                    <thead>
+                        <tr>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td></td>
+                        <td><strong></strong></td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td><strong></strong></td>
+                      </tr>
+                    
+                    </tbody>      
+                  </table>
+                </div>
+            </div>
+            <div class="widget span3">
+              <div class="widget-header"><i class="icon-signal"></i><h5>Most active pages</h5>
+                <div class="widget-buttons">
+                  <a href="javascript:void(0)" class="collapse" data-collapsed="false"><i data-title="Collapse" class="icon-chevron-up"></i></a>
+                </div>
+              </div>
+                <div class="widget-header-under">The most visited pages by your users</div>
+                <div class="widget-body clearfix" style="min-height: 319px;">
+                  <table class="table table-striped">
+                    <thead>
+                        <tr>
+                          <th>Page</th>
+                          <th>Visits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Categories</td>
+                        <td><strong>8790</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Clothing</td>
+                        <td><strong>7052</strong></td>
+                      </tr>
+                      <tr>
+                        <td>About</td>
+                        <td><strong>6577</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Contact Us</td>
+                        <td><strong>5760</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Blog</td>
+                        <td><strong>4876</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Prices</td>
+                        <td><strong>3866</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Information</td>
+                        <td><strong>1876</strong></td>
+                      </tr>
+                    </tbody>      
+                  </table>
+                </div>
+            </div>
+          </div>
+
+      </div>
+      <!-- /Main window -->
+      
+    </div><!--/.fluid-container-->
+    </div><!-- wrap ends-->
+
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+    <script type="text/javascript" src='assets/js/sparkline.js'></script>
+    <script type="text/javascript" src='assets/js/morris.min.js'></script>
+    <script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>   
+    <script type="text/javascript" src="assets/js/jquery.masonry.min.js"></script>   
+    <script type="text/javascript" src="assets/js/jquery.imagesloaded.min.js"></script>   
+    <script type="text/javascript" src="assets/js/jquery.facybox.js"></script>   
+    <script type="text/javascript" src="assets/js/jquery.alertify.min.js"></script> 
+    <script type="text/javascript" src="assets/js/jquery.knob.js"></script>
+    <script type='text/javascript' src='assets/js/fullcalendar.min.js'></script>
+    <script type='text/javascript' src='assets/js/jquery.gritter.min.js'></script>
+    <script type="text/javascript" src="assets/js/realm.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.slimscroll.min.js"></script>
+
+
+    <script type="text/javascript">
+    chartCount =1;
+    theOne= "";
+    $(document).ready(function () {
+
+      setTimeout(function(){
+
+          $('#graph').click(function(){
+
+            alert(theOne);
+
+          })
+      }, 2000)
+      getPData();
+      setInterval(getPData, 30000);
+    })
+
+      function getPData () {
+        $('.widget-analytics-small h4').css({'opacity':1})
+        setTimeout(function(){
+
+          $('.widget-analytics-small h4').animate({'opacity':.4}, 15000);
+        }, 10000);
+
+        $.getJSON('http://btc-maybe588.rhcloud.com/cloud/models/btc/minutePrices.php?callback=?',function(res){
+
+          console.log(res);
+          var theD = [];
+          var theA=[];
+          var theB=[];
+          $('.userstats strong:nth(0)').html("$"+res['prices'][0]['current'])
+          $('.userstats strong:nth(1)').html("$"+res['prices'][1]['bid'])
+          $('.userstats strong:nth(2)').html("$"+res['prices'][2]['ask'])
+          $('.userstats strong:nth(3)').html(res['prices'][3]['volume'])
+          $('.userstats strong:nth(4)').html("$"+res['prices'][4]['high'])
+          $('.userstats strong:nth(5)').html("$"+res['prices'][5]['low'])
+
+          var lowestVal;
+          var highestVal;
+          for(i in res['prices']){
+            if(i ==0){
+              lowestVal = parseFloat(res['prices'][i]['bid']);
+               highestVal = parseFloat(res['prices'][i]['ask']);
+            }
+
+            else{
+
+              if( parseFloat(res['prices'][i]['bid']) < lowestVal){
+                   lowestVal = parseFloat(res['prices'][i]['bid']);
+              }
+
+              if( parseFloat(res['prices'][i]['ask']) > highestVal){
+                   highestVal = parseFloat(res['prices'][i]['ask']);
+              }
+            }
+            theD.push({x:res['prices'][i]['timestamp'], y:parseFloat(res['prices'][i]['current']), a:parseFloat(res['prices'][i]['ask']), b: parseFloat(res['prices'][i]['bid'])})
+
+             //theA.push({x:res['prices'][i]['timestamp'], y:parseFloat(res['prices'][i]['ask'])})
+
+             //theB.push({x:res['prices'][i]['timestamp'], y:parseFloat(res['prices'][i]['bid'])})
+          }
+if(chartCount==1){
+
+
+           Morris.Line({
+   element: 'graph',
+  data:theD,
+  xkey: 'x',
+  ykeys: ['y', 'a', 'b'],
+  ymin:lowestVal,
+  ymax:highestVal,
+  preUnits:"$",
+  hideHover:false,
+  yLabelFormat:function (y) { return "$"+y.toFixed(2) },
+  //smooth: true,
+  hoverCallback: function (index, options, content, row) {
+    console.log(content)
+      theOne = index
+      return  (row.x +"<br> Price:" + row['y']+ "<br> Ask:" + row.a+"<br> Bid:" + row.b);
+  },
+  lineColors: ['transparent','#AEEA98', '#98E5EA'],
+  labels: ['$', 'ask', 'bid']
+  });
+         }
+
+         setTimeout(function(){
+
+          chartCount=chartCount+1;
+         }, 10000)
+       
+      })
+
+
+
+
+          $.getJSON('http://alina-prod.apigee.net/bitcoinprediction?what=minutely&apikey=fbESAOKT4mhobjxXkME5QRySawSkob0V&callback=?',function(res){
+ 
+
+
+            if(res['return'].slice(0,5).indexOf('%')==-1){
+
+              $('.widget-analytics-small h4:nth(0)').html(res['return'].slice(0,5)+ "%");
+            }
+
+            else{
+
+                $('.widget-analytics-small h4:nth(0)').html(res['return'].slice(0,5));
+            }
+
+
+      console.log(res['return'].slice(0,5)+ "%");
+            for(j in res['future']){
+
+              var thisBuy = (new Date(res['future'][j]['buyTime']).getHours()<10?'0':'') + new Date(res['future'][j]['buyTime']).getHours() + ":" +(new Date(res['future'][j]['buyTime']).getMinutes()<10?'0':'')+new Date(res['future'][j]['buyTime']).getMinutes()+ ":"+(new Date(res['future'][j]['buyTime']).getSeconds()<10?'0':'')+ new Date(res['future'][j]['buyTime']).getSeconds();
+
+              var thisSell = (new Date(res['future'][j]['sellTime']).getHours()<10?'0':'')+new Date(res['future'][j]['sellTime']).getHours() + ":" +(new Date(res['future'][j]['sellTime']).getMinutes()<10?'0':'')+new Date(res['future'][j]['sellTime']).getMinutes()+ ":"+(new Date(res['future'][j]['sellTime']).getSeconds()<10?'0':'')+ new Date(res['future'][j]['sellTime']).getSeconds();
+
+
+              res['future'][j]['buyTime']=thisBuy + " (EST)";
+                  res['future'][j]['sellTime']= thisSell+ " (EST)";
+            }
+           
+          console.log(res);
+          whichOne = 1;
+
+
+        
+          try{
+          var buyRecom = res['future'][(res['future'].length-whichOne)]['buyTime']
+
+           var sellRecom =res['future'][(res['future'].length-whichOne)]['sellTime']
+
+           if(buyRecom==sellRecom){
+            whichOne=2;
+           }
+           console.log(res['future'][(res['future'].length-whichOne)]);
+            var buyRecom = res['future'][(res['future'].length-whichOne)]['buyTime']
+
+           var sellRecom =res['future'][(res['future'].length-whichOne)]['sellTime']
+
+           if(buyRecom==sellRecom){
+            whichOne=3;
+           }
+
+
+
+         
+
+
+          $('.widget-analytics-small h4:nth(1)').html(res['future'][(res['future'].length-whichOne)]['buyTime'].split('T')[1]);
+
+
+
+
+  
+          $('.widget-analytics-small h4:nth(1)').html(res['future'][(res['future'].length-whichOne)]['buyTime']);
+
+
+           $('.widget-analytics-small h4:nth(2)').html(res['future'][(res['future'].length-whichOne)]['sellTime']);
+         }
+catch(err){
+//$('.widget-analytics-small h4:nth(0)').html("...")
+}
+try{
+
+      for(y in res['past']){
+
+        var z= parseInt(y);
+        var c = z+1;
+        var c1 = c+1;
+        /*
+        if(res['past'][(res['past'].length-c)]['buy'] == res['past'][(res['past'].length-c)]['sell'] && c!=res['past'].length){
+          console.log('cont')
+          console.log("buy" +c+ " =" +res['past'][(res['past'].length-c)]['buy']);
+           console.log("\nsell" +c+ " =" +res['past'][(res['past'].length-c)]['sell']);
+          continue;
+          console.log("continue ignored")
+        }
+
+        */
+
+        console.log('happend on '+ c)
+
+        try{
+           $('.widget-analytics-small h4:nth(3)').html(res['past'][(res['past'].length-c)]['buy']);
+
+           $('.widget-analytics-small h4:nth(4)').html(res['past'][(res['past'].length-c)]['sell']);
+         }
+         catch(err){}
+         try{
+           $('.widget-analytics-small h4:nth(5)').html(res['past'][(res['past'].length-c1)]['buy'])
+           $('.widget-analytics-small h4:nth(6)').html(res['past'][(res['past'].length-c1)]['sell'])
+         }
+         catch(err){}
+           break;
+
+
+         }
+       }
+
+         catch(err){
+
+          console.log('...')
+         } 
+          
+        // body...
+      })
+  
+      }
+    </script>
+  </body>
+</html>

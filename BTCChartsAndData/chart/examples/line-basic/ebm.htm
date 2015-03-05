@@ -1,0 +1,351 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+
+        $.getJSON('http://hedon.mobi/cloud/api/play/get.php?callback=?&action=getAll',
+                { },
+                function(res){
+
+                    console.log(res);
+                  // t= new sorter(res['data'], 15);
+
+                  e= new ebber(res['all'], 50);
+                 e.changeCardNum ();
+                   //t.breakUp();
+  
+            });
+
+
+        /*
+        Object.prototype.extends = function(obj){
+
+            for(i in this){
+
+                this[i]= obj[i];
+            }
+        }
+        */
+
+        var ebber = function(arr, limit){
+
+            this.allNums =arr;
+            this.winsLosses=[];
+
+            this.changeCardNum = function(){
+
+                arr= this.allNums;
+                for(i in arr){
+
+                    if(i>limit){
+                        arr.splice(i, (arr.length-limit))
+                        break;
+                    }
+
+                    if(arr[i]['result'] =="win"){
+                        this.winsLosses.push(15);
+                    }
+                    else if(arr[i]['result'] =="loss"){
+                        this.winsLosses.push(1);
+                    }
+                    else {
+                        this.winsLosses.push(7.5);
+                    }
+
+                    if(arr[i]['whichCard'] =="A"){
+
+                        arr[i]= 14; 
+                    }
+                    else if(arr[i]['whichCard'] =="K"){
+
+                        arr[i]= 13; 
+                    }
+                     else if(arr[i]['whichCard'] =="Q"){
+
+                        arr[i]= 12; 
+                    }
+                     else if(arr[i]['whichCard'] =="J"){
+
+                        arr[i]= 11; 
+                    }
+                    else{
+
+                            arr[i]= parseInt(arr[i]['whichCard'])
+                    }
+
+                    
+                  // 
+
+                }
+                this.allNums = arr;
+                    console.log(this.allNums)
+                     this.makeChar();
+            }
+
+            
+            this.makeChar= function(){
+
+               
+                         $('#container').highcharts({
+            title: {
+                text: 'Card Order',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: this.timestamps
+            },
+            yAxis: {
+                title: {
+                    text: 'Card by Number'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ' card as number'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Which Card',
+                data: this.allNums
+            },{
+                name: 'Results',
+                data: this.winsLosses
+            } 
+
+            
+           
+           
+            ]
+        });
+
+
+            }
+
+            
+
+        }
+
+        var sorter= function(arr, limit){
+
+            //comment to keep private
+            //this.array =array;
+           // this.limit= limit;
+            this.breakUp=function(){
+
+                var finalArr =[];
+
+                var winsArr=[];
+                var lossArr=[];
+                var drawArr=[];
+                 finIndex=0;
+                    xAx=[];
+                    bets=[];
+
+                for(i=0; i< arr.length; i++){
+                   
+                    pushedArray =[];
+                    wins=0;
+                    losses=0;
+                    draws=0;
+                    betAmount=0;
+
+                    for(j=0; j<limit; j++){
+
+                        k=parseInt(i)+parseInt(j);
+                        if(k>=arr.length){
+                            break;
+                        }
+                        console.log(k);
+                        pushedArray[j]= arr[k];
+                        if(arr[k]['result']=="win"){
+                            wins=wins+1;
+                        }
+                         else if(arr[k]['result']=="loss"){
+                            losses=losses+1;
+                        }
+                        else{
+                            draws= draws+1;
+                        }
+
+                        betAmount= betAmount+ parseInt(arr[k]['betAmount']);
+
+                         
+
+                    }
+
+                    //normalize
+                    bets.push((betAmount/limit));
+                    xAx.push(finIndex);
+                    finIndex= finIndex+1;
+                   winsArr.push(wins);
+                        lossArr.push(losses);
+                        drawArr.push(draws);
+                    finalArr.push(pushedArray);
+                    i=i+limit;
+                   
+                }
+
+                console.log(bets);
+                this.bets=bets;
+
+
+                this.xAx=xAx;
+                console.log(xAx);
+                
+                
+                console.log(finalArr);
+
+                console.log(winsArr);
+                this.winsArr=winsArr;
+                console.log(lossArr);
+                this.lossArr=lossArr;
+                console.log(drawArr);
+                this.drawArr=drawArr;
+                this.finalArr=finalArr;
+
+                genChart();
+
+            }
+        }
+
+
+        //time is rIds
+
+        //push onto rIds, all rIds
+$(function () {
+        $('#container').highcharts({
+            title: {
+                text: 'Monthly Average Temperature',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: '°C'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Wins',
+                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            }, {
+                name: 'Losses',
+                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+            }, {
+                name: 'Draws',
+                data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+            }, 
+
+            /*
+            {
+                name: 'London',
+                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            }
+            */
+            ]
+        });
+    });
+
+
+function genChart(){
+
+     $('#container').highcharts({
+            title: {
+                text: 'Win/Losses/Draws By Bet',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: t.xAx
+            },
+            yAxis: {
+                title: {
+                    text: '# of result kind'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: 'times'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Wins',
+                data: t.winsArr
+            }, {
+                name: 'Losses',
+                data: t.lossArr
+            }, {
+                name: 'Draws',
+                data:t.drawArr
+            }, 
+
+            
+            {
+                name: 'Normalized Bet Volume',
+                data: t.bets
+            }
+           
+            ]
+        });
+}
+    
+
+		</script>
+	</head>
+	<body>
+<script src="../../js/highcharts.js"></script>
+<script src="../../js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>
